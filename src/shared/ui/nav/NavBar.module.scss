@@ -1,0 +1,31 @@
+.menu {
+    &__wrapper {
+        background-color: #2196F3;
+        box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.24);
+        width: 100%;
+        margin-bottom: 3.42rem;
+    }
+
+    &__ul {
+        display: flex;
+        align-items: center;
+        justify-content: start;
+        width: 100%;
+        max-width: 1316px;
+        margin: 0 auto;
+    }
+
+    &__li>a {
+        color: #ffffff;
+        padding: 1.64rem;
+        display: block;
+        background-color: #2196F3;
+        outline: none;
+    }
+
+    &__li>a:hover {
+        background-color: #1E88E5;
+        transition: .3s;
+        outline: none;
+    }
+}

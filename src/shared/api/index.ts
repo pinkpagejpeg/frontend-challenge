@@ -1,0 +1,1 @@
+export { fetchCats } from "./cats"

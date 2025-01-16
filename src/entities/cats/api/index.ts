@@ -1,0 +1,1 @@
+export { getCats } from "./getCats"
