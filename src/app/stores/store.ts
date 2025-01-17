@@ -3,7 +3,9 @@ import { configureStore } from "@reduxjs/toolkit"
 import { catsReducer } from "../../entities/cats"
 
 export const store = configureStore({
-    reducer: catsReducer,
+    reducer: {
+        cats: catsReducer,
+    },
     middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(thunk)
 })
 

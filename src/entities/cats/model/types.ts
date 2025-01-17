@@ -1,5 +1,5 @@
 export interface ICatsState {
-    cats: ICat[]
+    favorite: IFavorite[]
     catsLoading: boolean,
     catsError: string | null | undefined,
 }
@@ -26,4 +26,9 @@ interface IBreed {
     country_code: string,
     life_span: string,
     wikipedia_url: string
+}
+
+export interface IFavorite {
+    id: string,
+    img: string
 }
