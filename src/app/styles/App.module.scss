@@ -27,3 +27,13 @@ a {
 ul {
   list-style-type: none;
 }
+
+/* media */
+
+/* smartphones */
+@media (max-width: 480px) {
+  html, body {
+    font-size: 13px;
+    line-height: 1.4;
+  }
+}
