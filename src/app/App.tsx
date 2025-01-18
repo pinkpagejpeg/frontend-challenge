@@ -1,6 +1,6 @@
 import { FC } from 'react'
 import { AppRouter } from './routers'
-import './styles/App.module.scss'
+import './styles/App.scss'
 import { MainProvider } from './providers'
 
 const App: FC = () => {
