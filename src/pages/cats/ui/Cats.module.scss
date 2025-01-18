@@ -1,9 +1,10 @@
 .cats {
     &__wrapper {
         width: 100%;
-        max-width: 1316px;
-        margin: 0 auto;
+        max-width: 1436px;
+        margin: 0 auto 3.4rem;
         padding: 0 1rem;
+        box-sizing: border-box;
 
         /* media */
 
@@ -25,8 +26,9 @@
     &__cards {
         display: grid;
         grid-template-columns: repeat(5, 1fr);
-        gap: 3.4rem;
+        row-gap: 3.4rem;
         width: 100%;
+        margin: 0 auto;
         justify-items: center;
         align-items: center;
 
@@ -35,24 +37,30 @@
         /* laptops */
         @media (max-width: 1440px) {
             grid-template-columns: repeat(4, 1fr);
-            gap: 2.8rem;
+            row-gap: 2.8rem;
         }
 
         @media (max-width: 1024px) {
             grid-template-columns: repeat(3, 1fr);
-            gap: 2.5rem;
+            row-gap: 2.5rem;
         }
 
         /* tablets */
         @media (max-width: 768px) {
             grid-template-columns: repeat(2, 1fr);
-            gap: 2rem;
+            row-gap: 2rem;
         }
 
         /* smartphones */
         @media (max-width: 480px) {
             grid-template-columns: 1fr;
-            gap: 1.5rem;
+            row-gap: 1.5rem;
         }
+    }
+
+    &__text {
+        width: 100%;
+        text-align: center;
+        margin: 2rem 0;
     }
 }
