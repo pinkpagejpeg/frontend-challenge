@@ -7,7 +7,7 @@ import { CatsCard } from "../../../features/catsCard"
 
 export const Cats: FC = () => {
     const [cats, setCats] = useState<ICat[]>([])
-    const { catsLoading, favorite } = useTypedSelector((state: any) => state.cats)
+    const { catsLoading } = useTypedSelector((state: any) => state.cats)
     const dispatch = useAppDispatch()
 
     useEffect(() => {
@@ -17,7 +17,6 @@ export const Cats: FC = () => {
     const fetchCats = async () => {
         try {
             const action = await dispatch(getCats())
-            // dispatch(getFavorite())
 
             if (getCats.fulfilled.match(action)) {
                 setCats((prevCats) => [...prevCats, ...(action.payload || [])])
@@ -27,12 +26,10 @@ export const Cats: FC = () => {
         }
     }
 
-    console.log(favorite)
-
     return (
         <div>
             <NavBar />
-            {catsLoading ? <LoadSpinner /> :
+            {catsLoading ? <LoadSpinner /> : 
                 <div className={classes.cats__wrapper}>
                     <div className={classes.cats__cards}>
                         {cats.length !== 0 &&

@@ -9,7 +9,7 @@ interface CatsCardProps {
 }
 
 export const CatsCard: FC<CatsCardProps> = ({ id, img }) => {
-    const dispatch = useAppDispatch();
+    const dispatch = useAppDispatch()
     const favorite = useTypedSelector((state) => state.cats.favorite)
 
     const favoriteButtonHandler = () => {
@@ -18,7 +18,7 @@ export const CatsCard: FC<CatsCardProps> = ({ id, img }) => {
         if (isFavorite) {
             dispatch(removeFavorite(id))
         } else {
-            dispatch(addFavorite({id, img}))
+            dispatch(addFavorite({ id, img }))
         }
     }
 

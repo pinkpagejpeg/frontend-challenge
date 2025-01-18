@@ -2,7 +2,7 @@ import { FC, useEffect } from "react"
 import { LoadSpinner, NavBar } from "../../../shared/ui"
 import classes from "./Favorite.module.scss"
 import { useAppDispatch, useTypedSelector } from "../../../shared/lib"
-import { setFavoriteFromStorage } from "../../../entities/cats"
+import { setError, setFavoriteFromStorage, setLoading } from "../../../entities/cats"
 import { CatsCard } from "../../../features/catsCard"
 
 export const Favorite: FC = () => {
@@ -15,8 +15,10 @@ export const Favorite: FC = () => {
 
     const fetchFavorite = () => {
         try {
+            dispatch(setLoading())
             dispatch(setFavoriteFromStorage())
-        } catch (error) {
+        } catch (error: any) {
+            dispatch(setError(error.message))
             console.error("При загрузке котиков возникла ошибка:", error)
         }
     }
@@ -44,3 +46,4 @@ export const Favorite: FC = () => {
         </div>
     )
 }
+

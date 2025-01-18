@@ -38,17 +38,17 @@
         visibility: hidden;
         transition: opacity 0.3s ease, visibility 0.3s ease, background-image 0.3s ease;
         background-color: transparent;
-        background-image: url('../../assets/favoriteButtonOutline.svg');
+        background-image: url('../../../shared/assets/favoriteButtonOutline.svg');
         border: none;
 
         &:hover {
             cursor: pointer;
-            background-image: url('../../assets/favoriteButtonHover.svg');
+            background-image: url('../../../shared/assets/favoriteButtonHover.svg');
         }
 
         &:active {
             cursor: pointer;
-            background-image: url('../../assets/favoriteButtonActive.svg');
+            background-image: url('../../../shared/assets/favoriteButtonActive.svg');
         }
     }
 }
