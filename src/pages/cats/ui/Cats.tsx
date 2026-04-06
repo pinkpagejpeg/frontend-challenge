@@ -1,66 +1,72 @@
-import { FC, useEffect, useState } from "react"
-import { LoadSpinner, NavBar } from "../../../shared/ui"
-import classes from "./Cats.module.scss"
-import { getCats, ICat } from "../../../entities/cats"
-import { useAppDispatch, useTypedSelector } from "../../../shared/lib"
+import { FC, useCallback, useEffect, useRef } from "react"
 import { CatsCard } from "../../../features/catsCard"
-import InfiniteScroll from "react-infinite-scroll-component"
+import { useCats } from "../model/useCats"
+import { ICat } from "../../../shared/model"
+import { LoadSpinner, NothingHere, PageLayout, Error } from "../../../shared/ui"
+import classes from "./Cats.module.scss"
 
+// Компонент главной страницы со списком котиков
 export const Cats: FC = () => {
-    const [cats, setCats] = useState<ICat[]>([])
-    const { catsLoading } = useTypedSelector((state: any) => state.cats)
-    const dispatch = useAppDispatch()
-    const [hasMore, setHasMore] = useState(true)
-    const [page, setPage] = useState(1)
+    const { cats, loading, loadingMore, error, hasMore, loadMore, fetchCats } = useCats()
+
+    const loaderRef = useRef<HTMLDivElement>(null)
+
+    const handleObserver = useCallback((entries: IntersectionObserverEntry[]) => {
+        if (entries[0].isIntersecting && hasMore && !loadingMore) {
+            loadMore()
+        }
+    }, [hasMore, loadingMore, loadMore])
 
     useEffect(() => {
-        fetchCats()
-    }, [])
+        if (!loaderRef.current || loading) return
 
-    const fetchCats = async () => {
-        try {
-            const action = await dispatch(getCats(page))
+        const observer = new IntersectionObserver(handleObserver, {
+            threshold: 0.1,
+            rootMargin: '200px'
+        })
 
-            if (getCats.fulfilled.match(action)) {
-                setCats((prevCats) => [...prevCats, ...action.payload])
-                setPage((prevPage) => prevPage + 1)
+        observer.observe(loaderRef.current)
 
-                if (action.payload.length === 0) {
-                    setHasMore(false)
-                }
-            }
-        } catch (error) {
-            console.error("При загрузке котиков возникла ошибка:", error)
-        }
+        return () => observer.disconnect()
+    }, [loading, handleObserver])
+
+    if (error) {
+        return (
+            <PageLayout>
+                <Error message={error} onRetry={fetchCats} />
+            </PageLayout>
+        )
     }
 
     return (
-        <div>
-            <NavBar />
-            {catsLoading && cats.length === 0 ? (
+        <PageLayout>
+            {loading && cats.length === 0 ? (
                 <LoadSpinner />
+            ) : cats.length === 0 ? (
+                <NothingHere
+                    title="Котики не найдены"
+                    message="Попробуйте зайти позже"
+                />
             ) : (
                 <div className={classes.cats__wrapper}>
-                    <InfiniteScroll
-                        dataLength={cats.length}
-                        next={fetchCats}
-                        hasMore={hasMore}
-                        loader={<p className={classes.cats__text}>... Загружаем еще котиков ...</p>}
-                        endMessage={<p className={classes.cats__text}>Котики закончились</p>}
-                    >
-                        <div className={classes.cats__cards}>
-                            {cats.length !== 0 &&
-                                cats.map((item: ICat, index) => (
-                                    <CatsCard
-                                        key={`${item.id}-${index}`}
-                                        id={item.id}
-                                        img={item.url}
-                                    />
-                                ))}
+                    <div className={classes.cats__cards}>
+                        {cats.map((item: ICat) => (
+                            <CatsCard
+                                key={item.id}
+                                id={item.id}
+                                img={item.url}
+                            />
+                        ))}
+                    </div>
+                    {hasMore && (
+                        <div className={classes.cats__loaderMore} ref={loaderRef}>
+                            {loadingMore && (
+                                <p className={classes.cats__text}>... Загружаем еще котиков ...</p>
+                            )}
                         </div>
-                    </InfiniteScroll>
+                    )}
                 </div>
             )}
-        </div>
+        </PageLayout>
     )
 }

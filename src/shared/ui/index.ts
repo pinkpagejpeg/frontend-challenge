@@ -1,2 +1,5 @@
 export { NavBar } from "./nav/NavBar"
 export { LoadSpinner } from "./loadSpinner/LoadSpinner"
+export { Error } from "./error/Error"
+export { NothingHere } from "./nothingHere/NothingHere"
+export { PageLayout } from "./pageLayout/PageLayout"

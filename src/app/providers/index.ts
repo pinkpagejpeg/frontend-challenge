@@ -1,1 +1,0 @@
-export { MainProvider } from "./MainProvider"

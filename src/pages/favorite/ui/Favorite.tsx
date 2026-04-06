@@ -1,49 +1,78 @@
-import { FC, useEffect } from "react"
-import { LoadSpinner, NavBar } from "../../../shared/ui"
-import classes from "./Favorite.module.scss"
-import { useAppDispatch, useTypedSelector } from "../../../shared/lib"
-import { setError, setFavoriteFromStorage, setLoading } from "../../../entities/cats"
+import { FC, useEffect, useState } from "react"
 import { CatsCard } from "../../../features/catsCard"
+import { useLocalStorage } from "../../../shared/lib"
+import { FAVORITE_KEY } from "../../../shared/config"
+import { CatsService } from "../../../shared/api"
+import { LoadSpinner, Error, NothingHere, PageLayout } from "../../../shared/ui"
+import { ICat } from "../../../shared/model"
+import classes from "./Favorite.module.scss"
 
+// Компонент страницы с избранными котиками
 export const Favorite: FC = () => {
-    const { catsLoading, favorite } = useTypedSelector((state: any) => state.cats)
-    const dispatch = useAppDispatch()
+    const [favorites] = useLocalStorage<number[]>(FAVORITE_KEY, [])
+    const [favoriteCats, setFavoriteCats] = useState<ICat[]>([])
+    const [loading, setLoading] = useState(true)
+    const [error, setError] = useState<string | null>(null)
 
-    useEffect(() => {
-        fetchFavorite()
-    }, [])
+    const fetchFavoriteCats = async () => {
+        if (favorites.length === 0) {
+            setFavoriteCats([])
+            setLoading(false)
+            return
+        }
 
-    const fetchFavorite = () => {
+        setLoading(true)
+        setError(null)
+
         try {
-            dispatch(setLoading())
-            dispatch(setFavoriteFromStorage())
-        } catch (error: any) {
-            dispatch(setError(error.message))
-            console.error("При загрузке котиков возникла ошибка:", error)
+            const promises = favorites.map(id => CatsService.getById(String(id)))
+            const responses = await Promise.all(promises)
+            const films = responses.map(response => response.data)
+
+            setFavoriteCats(films)
+        } catch (error) {
+            setError('Не удалось загрузить избранные фильмы')
+            console.error(error)
+        } finally {
+            setLoading(false)
         }
     }
 
+    useEffect(() => {
+        fetchFavoriteCats()
+    }, [favorites])
+
+    if (error) {
+        return (
+            <PageLayout>
+                <Error message={error} onRetry={fetchFavoriteCats} />
+            </PageLayout>
+        )
+    }
+
     return (
-        <div>
-            <NavBar />
-            {catsLoading ? <LoadSpinner /> :
+        <PageLayout>
+            {loading ? <LoadSpinner /> :
                 <div className={classes.favorite__wrapper}>
-                    {favorite.length > 0 ? (
+                    {favoriteCats.length === 0 ? (
+                        <NothingHere
+                            title="Любимые котики не обнаружены"
+                            message="Добавьте котика в избранное или попробуйте зайти позже"
+                        />
+                    ) : (
                         <div className={classes.favorite__cards}>
-                            {favorite.map((item: { id: string, img: string }) => (
+                            {favoriteCats.map((item: ICat) => (
                                 <CatsCard
                                     key={item.id}
                                     id={item.id}
-                                    img={item.img}
+                                    img={item.url}
                                 />
                             ))}
                         </div>
-                    ) : (
-                        <p className={classes.favorite__text}>Любимые котики не обнаружены</p>
                     )}
                 </div>
             }
-        </div>
+        </PageLayout>
     )
 }
 

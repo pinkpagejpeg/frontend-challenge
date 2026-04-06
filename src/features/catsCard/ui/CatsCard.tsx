@@ -1,7 +1,7 @@
-import { FC } from "react"
+import { FC, useCallback } from "react"
+import { useLocalStorage } from "../../../shared/lib"
+import { FAVORITE_KEY } from "../../../shared/config"
 import classes from "./CatsCard.module.scss"
-import { useAppDispatch, useTypedSelector } from "../../../shared/lib"
-import { addFavorite, removeFavorite } from "../../../entities/cats"
 
 interface CatsCardProps {
     id: string
@@ -9,23 +9,23 @@ interface CatsCardProps {
 }
 
 export const CatsCard: FC<CatsCardProps> = ({ id, img }) => {
-    const dispatch = useAppDispatch();
-    const favorite = useTypedSelector((state) => state.cats.favorite)
+    const [favourites, setFavourites] = useLocalStorage<string[]>(FAVORITE_KEY, [])
+    const isFavourite = favourites.includes(id)
 
-    const favoriteButtonHandler = () => {
-        const isFavorite = favorite.some(fav => fav.id === id)
-
-        if (isFavorite) {
-            dispatch(removeFavorite(id))
+    const favoriteButtonHandler = useCallback(() => {
+        if (isFavourite) {
+            setFavourites(prev => prev.filter(favId => favId !== id))
         } else {
-            dispatch(addFavorite({id, img}))
+            setFavourites(prev => [...prev, id])
         }
-    }
+    }, [id, isFavourite, setFavourites])
 
     return (
         <div className={classes.cats__card}>
             <img className={classes.cats__img} src={img} />
-            <button className={classes.cats__button} onClick={favoriteButtonHandler}></button>
+            <button
+                className={`${classes.cats__button} ${isFavourite ? classes.active : ''}`}
+                onClick={favoriteButtonHandler} />
         </div>
     )
 }

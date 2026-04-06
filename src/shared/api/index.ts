@@ -1,1 +1,1 @@
-export { fetchCats } from "./fetchCats"
+export { CatsService } from "./CatsApi"

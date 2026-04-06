@@ -1,7 +1,7 @@
 import { FC } from "react"
-import classes from "./NavBar.module.scss"
 import { NavLink } from "react-router-dom"
 import { CATS_ROUTE, FAVORITE_ROUTE } from "../../config"
+import classes from "./NavBar.module.scss"
 
 export const NavBar: FC = () => {
     return (

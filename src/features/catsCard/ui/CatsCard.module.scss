@@ -53,6 +53,10 @@
             cursor: pointer;
             background-image: url('../../../shared/assets/favoriteButtonActive.svg');
         }
+
+        &.active {
+            background-image: url('../../../shared/assets/favoriteButtonActive.svg');
+        }
     }
 
     /* media */
