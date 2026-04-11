@@ -5,7 +5,7 @@ import { publicRoutes } from "./routes"
 export const AppRouter = () => {
   // Создание экземпляра маршрутизатора на основе маршрутов publicRoutes
   const router = createBrowserRouter(publicRoutes, {
-    basename: "/",
+    basename: "/frontend-challenge",
   });
 
   return <RouterProvider router={router} />
