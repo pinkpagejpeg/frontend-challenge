@@ -31,7 +31,7 @@ export const Favorite: FC = () => {
 
             setFavoriteCats(films)
         } catch (error) {
-            setError('Не удалось загрузить избранные фильмы')
+            setError('Не удалось загрузить избранных котиков')
             console.error(error)
         } finally {
             setLoading(false)
@@ -57,7 +57,7 @@ export const Favorite: FC = () => {
                     {favoriteCats.length === 0 ? (
                         <NothingHere
                             title="Любимые котики не обнаружены"
-                            message="Добавьте котика в избранное или попробуйте зайти позже"
+                            message="Добавьте котика в избранное и он появится здесь"
                         />
                     ) : (
                         <div className={classes.favorite__cards}>

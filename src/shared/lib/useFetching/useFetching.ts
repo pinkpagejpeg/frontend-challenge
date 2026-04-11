@@ -24,6 +24,7 @@ export function useFetching<Args extends unknown[]>(
       // При выполнении запроса на сервер включается индикатор загрузки
       // и вызывается переданная асинхронная функция с запросом
       setIsLoading(true)
+      setError('')
       await callback(...args)
     } catch (error) {
       // При возникновении ошибки сохраняется сообщение об ошибке
